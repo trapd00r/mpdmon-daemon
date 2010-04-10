@@ -2,6 +2,7 @@ mpdmon-daemon
 ===============
 This version of mpdmon daemonizes itself, and executes arbitary
 commands on song change. 
+
 I use the stumpish application for notifying me (part of stumpwm, contrib/).
 
 License
