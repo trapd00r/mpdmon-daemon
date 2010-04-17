@@ -6,8 +6,11 @@ use strict;
 # commands on song change. I use the stumpish application for notifying 
 # me (part of stumpwm, contrib/).
 
-use Proc::Daemon;
+use App::Daemon qw(daemonize);
 use Audio::MPD;
+use Getopt::Long;
+
+GetOptions('h|help' => \&usage);
 
 my $mpd = Audio::MPD->new;
 # arbitary command to run on song change
@@ -19,7 +22,7 @@ my $xosd_font = '-*-profont-*-*-*-*-15-*-*-*-*-*-*-*';
 sub monitor {  
   my $np = "";
   print "Daemonizing...\n";
-  Proc::Daemon::Init;
+  daemonize();
   while(1) {
     my $current = $mpd->current;
     my $output = sprintf("%s (%s) %s", $mpd->current->artist,
@@ -35,3 +38,17 @@ sub monitor {
 }
 
 &monitor;
+
+sub usage {
+  print << "USAGE";
+  $0 (start|stop|status)
+  $0 [OPTIONS]
+  OPTIONS
+    -X    run in foreground
+    -l    log to file
+    -u    user to run as
+    -p    pid file location
+
+USAGE
+exit 0;
+}
